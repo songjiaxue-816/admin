@@ -2,9 +2,10 @@ import { Button, Checkbox, Form, FormInstance, Input, message, Space } from 'ant
 import React, { Component, createRef, RefObject } from 'react';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import '../static/css/login.css';
-import { login } from '../api/login';
+import { Login } from '../api/login';
 import { set } from '../utils/storage';
 import { BrowserRouter as Router,Route,Link } from 'react-router-dom';
+import { validPsw , validPhone} from '../utils/validate';
 
 // const {getFieldProps} = this.props.form;
 
@@ -33,19 +34,26 @@ class Login_phone extends Component {
         this.formRef = createRef<FormInstance>()
         
     }
-
-    login = (form:any) =>{
-        login(form.name,form.password).then(response=>{
-            const {code,msg,data} = response.data;
-            if(code===0){
-                set('token',data.token)
-                window.location.href = '/'
-                message.success(msg)
-            }else{
-                message.error(msg)
-            }
+    onFinish=(values:any)=>{
+        Login(values).then(response =>{
+            console.log(response)
+        }).catch(error =>{
+            
         })
     }
+
+    // login = (form:any) =>{
+    //     login(form.name,form.password).then(response=>{
+    //         const {code,msg,data} = response.data;
+    //         if(code===0){
+    //             set('token',data.token)
+    //             window.location.href = '/'
+    //             message.success(msg)
+    //         }else{
+    //             message.error(msg)
+    //         }
+    //     })
+    // }
 
     
     render() {
@@ -58,39 +66,32 @@ class Login_phone extends Component {
                     name="normal_login"
                     className="login-form"
                     initialValues={{ remember: true }}
-                    onFinish={this.login}
+                    onFinish={this.onFinish}
                 >
                     <Form.Item
                         name="name"
                         // label="phone"
-                        rules={[{type:'string',  required: true, message: 'Please input your Username!' },
-                        {pattern:/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/ ,message:'手机号不正确'}
-                    ]}
-                        // validateStatus="error"
-                        // help="Should be combination of numbers & alphabets"  
-                    >
-                        {/* {form.getFieldDecorator('name', 
-                        {
-                            rules: [
-                            { required: true, message: '请输入名称' },
-                            { max:20, message: '名称不超过20个字符' },
-                            { pattern: new RegExp(/^[0-9a-zA-Z_]{1,}$/, "g") , message: '名称只允许包含数字、字母和下划线' }
+                        rules={
+                            [
+                                {type:'string',  required: true, message: 'Please input your Username!' },
+                                {pattern:validPhone ,message:'手机号不正确'}
                             ]
                         }
-                        )
-                        (<Input />)
-                        } */}
-
+                    >
                         <Input 
-                        
                         type="tel"
-                        
                         prefix={<UserOutlined className="site-form-item-icon" />} 
                         placeholder="请输入手机号" />
                     </Form.Item>
                     <Form.Item
                         name="password"
-                        rules={[{type:'string', required: true, message: 'Please input your Password!' }]}
+                        rules={
+                            [
+                                {type:'string', required: true, message: 'Please input your Password!' },
+                                // {min:6,message:'不能小于6位'},
+                                // {max:15,message:'不能大于15位'}
+                                {pattern:validPsw,message:'请输入6-20位的数字加字母'}                     ]
+                        }
                     >
                         <Input.Password
                         prefix={<LockOutlined className="site-form-item-icon" />}
