@@ -1,13 +1,9 @@
-import { Button, Checkbox, Form, FormInstance, Input, message, Space } from 'antd';
+import { Button, Form, FormInstance, Input, message, Space } from 'antd';
 import React, { Component, createRef, RefObject } from 'react';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import '../static/css/login.css';
-// import { login } from '../api/login';
-import { set } from '../utils/storage';
-import { BrowserRouter as Router,Route,Link } from 'react-router-dom';
 import { validPhone } from '../utils/validate';
-
-//antd form
+import {Yan} from '../api/login'
 
 const layout = {
     labelCol:{span:8},
@@ -18,21 +14,56 @@ const tailLayout = {
     wrapperCol:{offset:8,span:16},
 };
 
-const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
-  };
-
-class Login_yan extends Component {
+class Login_yan extends Component <any,any>{
     formRef:RefObject<FormInstance>
 
     
     constructor(props:any, context:any) {
         super(props,context);
         this.formRef = createRef<FormInstance>()
+
+        this.state={
+            count:60,
+            flag:true
+        }
         
     }
 
+
+    onFinish=(form:any)=>{
+        Yan(form.mobile,form.code).then(response =>{
+            const {code,msg} = response.data;
+            if (code === 1000){
+                message.success(msg)
+            }else{
+                message.error(msg)
+            }
+        })
+    }
     
+    countDown() {
+        const {count} = this.state;
+        if (count === 1) {
+        this.setState({
+            count: 60,
+            flag: true,
+        });
+        } else {
+        this.setState({
+            count: count - 1,
+            flag: false,
+        });
+        setTimeout(this.countDown.bind(this), 1000);
+        }
+    }
+    
+    handleClick = () => {
+        const {flag} = this.state;
+        if (!flag) {
+        return;
+        }
+        this.countDown();
+    };
 
     render() {
         return (
@@ -43,10 +74,10 @@ class Login_yan extends Component {
                     name="normal_login"
                     className="login-form"
                     initialValues={{ remember: true }}
-                    onFinish={onFinish}
+                    onFinish={this.onFinish}
                 >
                     <Form.Item
-                        name="name"
+                        name="mobile"
                         rules={
                             [
                                 {type:'string', required: true, message: 'Please input your Username!' },
@@ -58,7 +89,7 @@ class Login_yan extends Component {
                         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入手机号" />
                     </Form.Item>
                     <Form.Item
-                        name="password"
+                        name="code"
                         rules={
                             [
                                 {type:'string', required: true, message: 'Please input your Phone!' },
@@ -74,7 +105,14 @@ class Login_yan extends Component {
                         
                     </Form.Item>
                     <Form.Item>
-                        <a>获取验证码</a>
+                        <Button onClick={() => this.handleClick()} type="primary">
+                            {
+                            this.state.flag
+                                ? '获取验证码'
+                                : `${this.state.count} 秒后重发`
+                            }
+                        </Button>
+
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="login-form-button">

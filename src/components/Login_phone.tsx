@@ -3,8 +3,6 @@ import React, { Component, createRef, RefObject } from 'react';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import '../static/css/login.css';
 import { Login } from '../api/login';
-import { set } from '../utils/storage';
-import { BrowserRouter as Router,Route,Link } from 'react-router-dom';
 import { validPsw , validPhone} from '../utils/validate';
 
 // const {getFieldProps} = this.props.form;
@@ -17,13 +15,13 @@ const layout = {
 };
 // const {getFieldDecorator} = this.props.form;
 
-const tailLayout = {
-    wrapperCol:{offset:8,span:16},
-};
+// const tailLayout = {
+//     wrapperCol:{offset:8,span:16},
+// };
 
-const onFinish = (values: any) => {
-    console.log('Received values of form: ', values);
-  };
+// const onFinish = (values: any) => {
+//     console.log('Received values of form: ', values);
+//   };
 
 class Login_phone extends Component {
     formRef:RefObject<FormInstance>
@@ -34,11 +32,14 @@ class Login_phone extends Component {
         this.formRef = createRef<FormInstance>()
         
     }
-    onFinish=(values:any)=>{
-        Login(values).then(response =>{
-            console.log(response)
-        }).catch(error =>{
-            
+    onFinish=(form:any)=>{
+        Login(form.mobile,form.password).then(response =>{
+            const {code,msg} = response.data;
+            if (code === 1000){
+                message.success(msg)
+            }else{
+                message.error(msg)
+            }
         })
     }
 
@@ -69,7 +70,7 @@ class Login_phone extends Component {
                     onFinish={this.onFinish}
                 >
                     <Form.Item
-                        name="name"
+                        name="mobile"
                         // label="phone"
                         rules={
                             [
