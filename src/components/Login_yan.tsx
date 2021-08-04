@@ -86,7 +86,7 @@ class Login_yan extends Component <any,any>{
                         }
                     >
                     
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入手机号" />
+                        <Input  placeholder="请输入手机号" />
                     </Form.Item>
                     <Form.Item
                         name="code"
@@ -98,21 +98,21 @@ class Login_yan extends Component <any,any>{
                         }
                     >
                         <Input
-                        prefix={<LockOutlined className="input-yan" />}
                         type="password"
                         placeholder="请输入短信验证码"
+                        suffix={
+                            <Button id='getYan' 
+                            size='small'
+                            onClick={  () => this.handleClick()} type="text" >
+                                    {
+                                    this.state.flag
+                                        ? '获取验证码'
+                                        : `${this.state.count} 秒后重发`
+                                    }
+                            </Button>
+                        }
                         />
                         
-                    </Form.Item>
-                    <Form.Item>
-                        <Button onClick={() => this.handleClick()} type="primary">
-                            {
-                            this.state.flag
-                                ? '获取验证码'
-                                : `${this.state.count} 秒后重发`
-                            }
-                        </Button>
-
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" className="login-form-button">

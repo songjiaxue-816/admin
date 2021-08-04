@@ -81,7 +81,6 @@ class Login_phone extends Component {
                     >
                         <Input 
                         type="tel"
-                        prefix={<UserOutlined className="site-form-item-icon" />} 
                         placeholder="请输入手机号" />
                     </Form.Item>
                     <Form.Item
@@ -95,7 +94,6 @@ class Login_phone extends Component {
                         }
                     >
                         <Input.Password
-                        prefix={<LockOutlined className="site-form-item-icon" />}
                         type="password"
                         placeholder="请输入登录密码"
                         />

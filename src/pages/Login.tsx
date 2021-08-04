@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, FormInstance, Input, message, Space, } from 'antd';
 import React, { Component, createRef, RefObject } from 'react';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined,LoadingOutlined,Loading3QuartersOutlined  } from '@ant-design/icons';
 import '../static/css/login.css';
 // import { login } from '../api/login';
 // import { set } from '../utils/storage';
@@ -93,13 +93,13 @@ import Login_phone from '../components/Login_phone';
                 id="paswLogin"
                 onClick={()=>{ this.setState({flag:true},
                             this.clickHandle) }}
-
-                // onMouseOver={this.moveonHandle1}
-                // onMouseLeave={this.leaveHandle1}
                 >
                     密码登陆
                 </button>
-                <DownOutlined id="jiantou"  style={{color:'blue'}} />
+                <LoadingOutlined 
+                id="jiantou" 
+                rotate={135} 
+                style={{color:'blue', fontSize:'30px'}} />
             </div>
             <div className="login-method">
                 <button 
@@ -107,14 +107,13 @@ import Login_phone from '../components/Login_phone';
                 id="yanLogin"
                 onClick={()=>{ this.setState({flag:false},
                     this.clickHandle2) }}
-
-                // onMouseOver={this.moveonHandle2}
-                // onMouseLeave={this.leaveHandle2}
-                
                 >
                     验证码登录
                 </button>
-                <DownOutlined id="jiantou1"  style={{color:'blue'}} />
+                <LoadingOutlined 
+                id="jiantou1" 
+                rotate={135} 
+                style={{color:'blue',fontSize:'30px'}} />
             </div>
             </Space>
             
